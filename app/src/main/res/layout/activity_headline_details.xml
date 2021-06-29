@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.details.HeadlineDetailsActivity">
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:id="@+id/imageViewBanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/imageViewBack"
+        android:padding="7dp"
+        android:layout_alignParentTop="true"
+        app:tint="@color/white"
+        android:background="@drawable/circle_shape"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"/>
+
+    <RelativeLayout
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:fontFamily="@font/roboto_slab_bold"
+            android:textColor="@color/white"
+            android:textSize="29sp"
+            android:layout_above="@+id/relativeLayoutInfo"
+            android:layout_marginBottom="64dp"
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutInfo"
+            android:layout_marginBottom="16dp"
+            android:layout_above="@+id/textViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:fontFamily="@font/roboto_slab_regular"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:id="@+id/textViewCnn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:fontFamily="@font/roboto_slab_regular"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/textViewDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:fontFamily="@font/roboto_slab_regular"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/textViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
