@@ -8,15 +8,22 @@ import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.local.AppDatabase
 import com.app.newsfeed.data.source.local.ILocalDataSource
 import com.app.newsfeed.data.source.local.LocalDataSource
-import com.app.newsfeed.data.source.remote.RemoteDataSource
+import com.app.newsfeed.data.source.remote.IRemoteDataSource
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-object ServiceLocator {
+class ServiceLocator {
+
+    @Inject
+    lateinit var localDataSource: LocalDataSource
+
+    @Inject
+    lateinit var remoteDataSource: IRemoteDataSource
 
     private val lock = Any()
     private var database: AppDatabase? = null
@@ -36,10 +43,12 @@ object ServiceLocator {
         val newRepo = DataRepository(createLocalDataSource(context), createRemoteDataSource())
         dataRepository = newRepo
         return newRepo
+
+        //return DataRepository(localDataSource, remoteDataSource)
     }
 
 
-    private fun createRemoteDataSource(): RemoteDataSource {
+    private fun createRemoteDataSource(): IRemoteDataSource {
         val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
         val okHttpClient = OkHttpClient.Builder()
@@ -51,7 +60,7 @@ object ServiceLocator {
             .baseUrl("https://newsapi.org/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
-            .build().create(RemoteDataSource::class.java)
+            .build().create(IRemoteDataSource::class.java)
     }
 
     private fun createLocalDataSource(context: Context): ILocalDataSource {

@@ -5,27 +5,38 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.newsfeed.AppController
 import com.app.newsfeed.R
+import com.app.newsfeed.data.DataRepository
+import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.ResultData
 import com.app.newsfeed.pojo.EmptyView
 import com.app.newsfeed.ui.details.HeadlineDetailsActivity
 import com.app.newsfeed.utilities.PaginationScrollListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_headlines.*
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HeadlinesActivity :  AppCompatActivity() {
 
     private  val TAG = "HeadlinesActivity"
 
     lateinit var headlineAdapter: HeadlineAdapter
 
+    @Inject
+    lateinit var dataRepository: IDataRepository
+
     private val headlinesViewModel by viewModels<HeadlinesViewModel> {
-        HeadlinesViewModelFactory((applicationContext as AppController).dataRepository)
+        HeadlinesViewModelFactory(dataRepository)
     }
+
+    //private val headlinesViewModel by viewModels<HeadlinesViewModel>()
 
     private val linearLayoutManager: LinearLayoutManager by lazy {
         LinearLayoutManager(this@HeadlinesActivity)

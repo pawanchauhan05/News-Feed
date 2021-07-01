@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
-interface RemoteDataSource {
+interface IRemoteDataSource {
 
     @GET("v2/top-headlines")
     suspend fun getHeadlines(@QueryMap queryParams : Map<String, String>): Response

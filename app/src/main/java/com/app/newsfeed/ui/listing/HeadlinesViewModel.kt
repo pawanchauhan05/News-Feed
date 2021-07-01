@@ -5,14 +5,17 @@ import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.ResultData
 import com.app.newsfeed.pojo.EmptyView
 import com.app.newsfeed.utilities.Config
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class HeadlinesViewModel(
+@HiltViewModel
+class HeadlinesViewModel @Inject constructor(
     private val dataRepository: IDataRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
@@ -72,7 +75,7 @@ class HeadlinesViewModel(
 }
 
 @Suppress("UNCHECKED_CAST")
-class HeadlinesViewModelFactory(
+class HeadlinesViewModelFactory @Inject constructor(
     private val dataRepository: IDataRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModelProvider.NewInstanceFactory() {

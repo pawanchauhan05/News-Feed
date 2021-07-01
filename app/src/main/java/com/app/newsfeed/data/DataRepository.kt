@@ -1,17 +1,17 @@
 package com.app.newsfeed.data
 
-import android.util.Log
 import com.app.newsfeed.data.source.ResultData
 import com.app.newsfeed.data.source.local.ILocalDataSource
-import com.app.newsfeed.data.source.remote.RemoteDataSource
+import com.app.newsfeed.data.source.remote.IRemoteDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
 class DataRepository(
     public val localDataSource: ILocalDataSource,
-    public val remoteDataSource: RemoteDataSource,
+    public val remoteDataSource: IRemoteDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : IDataRepository {
 
