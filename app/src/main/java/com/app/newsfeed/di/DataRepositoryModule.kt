@@ -1,5 +1,6 @@
 package com.app.newsfeed.di
 
+import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.data.DataRepository
 import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.local.ILocalDataSource
@@ -20,10 +21,10 @@ object DataRepositoryModule {
     fun provideDataRepository(
         localDataSource: ILocalDataSource,
         remoteDataSource: IRemoteDataSource,
-        ioDispatcher: CoroutineDispatcher
+        coDispatcher: CoDispatcher
     ): IDataRepository {
         return DataRepository(
-            localDataSource, remoteDataSource, ioDispatcher
+            localDataSource, remoteDataSource, coDispatcher
         )
     }
 }

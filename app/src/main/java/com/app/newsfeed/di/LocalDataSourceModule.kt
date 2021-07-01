@@ -2,6 +2,7 @@ package com.app.newsfeed.di
 
 import android.content.Context
 import androidx.room.Room
+import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.data.source.local.AppDatabase
 import com.app.newsfeed.data.source.local.ILocalDataSource
 import com.app.newsfeed.data.source.local.LocalDataSource
@@ -20,6 +21,9 @@ import javax.inject.Singleton
 @Module
 object LocalDataSourceModule {
 
+    /*@Inject
+    lateinit var coDispatcher: CoDispatcher*/
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): AppDatabase {
@@ -32,12 +36,12 @@ object LocalDataSourceModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(appDatabase: AppDatabase, ioDispatcher: CoroutineDispatcher) : ILocalDataSource {
-        return LocalDataSource(appDatabase.getArticleDao(), ioDispatcher)
+    fun provideLocalDataSource(appDatabase: AppDatabase, coDispatcher: CoDispatcher) : ILocalDataSource {
+        return LocalDataSource(appDatabase.getArticleDao(), coDispatcher)
     }
 
-    @Singleton
+    /*@Singleton
     @Provides
-    fun provideIoDispatcher() = Dispatchers.IO
+    fun provideIoDispatcher() = Dispatchers.IO*/
 
 }

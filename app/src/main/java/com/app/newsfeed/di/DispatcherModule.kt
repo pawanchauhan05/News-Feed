@@ -1,24 +1,27 @@
 package com.app.newsfeed.di
 
+import com.app.newsfeed.core.CoDispatcher
+import com.app.newsfeed.core.CoroutineDispatchers
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Qualifier
-import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
 @Module
+@InstallIn(SingletonComponent::class)
 object DispatcherModule {
 
-    /*@Qualifier
-    @Retention(AnnotationRetention.RUNTIME)
-    annotation class DispatchersIO
-
-    @Singleton
     @Provides
-    @DispatchersIO
-    fun provideIoDispatcher() : CoroutineDispatcher = Dispatchers.IO*/
+    fun providesIoDispatcher(): CoDispatcher = CoroutineDispatchers()
+
+    /*@Provides
+    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Provides
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main*/
 }

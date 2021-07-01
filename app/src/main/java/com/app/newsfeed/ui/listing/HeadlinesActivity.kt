@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.newsfeed.AppController
 import com.app.newsfeed.R
+import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.data.DataRepository
 import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.ResultData
@@ -32,8 +33,11 @@ class HeadlinesActivity :  AppCompatActivity() {
     @Inject
     lateinit var dataRepository: IDataRepository
 
+    @Inject
+    lateinit var coDispatcher: CoDispatcher
+
     private val headlinesViewModel by viewModels<HeadlinesViewModel> {
-        HeadlinesViewModelFactory(dataRepository)
+        HeadlinesViewModelFactory(dataRepository, coDispatcher)
     }
 
     //private val headlinesViewModel by viewModels<HeadlinesViewModel>()

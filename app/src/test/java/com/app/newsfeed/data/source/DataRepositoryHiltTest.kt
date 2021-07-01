@@ -1,12 +1,19 @@
 package com.app.newsfeed.data.source
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.app.newsfeed.FakeResponseUtility
 import com.app.newsfeed.MainCoroutineRule
+import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.data.DataRepository
+import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.local.FakeLocalDataSource
+import com.app.newsfeed.data.source.local.ILocalDataSource
 import com.app.newsfeed.data.source.remote.FakeRemoteDataSource
+import com.app.newsfeed.data.source.remote.IRemoteDataSource
 import com.app.newsfeed.pojo.Article
-import com.app.newsfeed.pojo.Response
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
@@ -16,32 +23,43 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.Exception
-import java.net.SocketTimeoutException
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
+import javax.inject.Inject
 
-/*
-class DataRepositoryTest {
-    private lateinit var fakeLocalDataSource: FakeLocalDataSource
-    private lateinit var fakeRemoteDataSource: FakeRemoteDataSource
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+@Config(application = HiltTestApplication::class)
+class DataRepositoryHiltTest {
 
-    private lateinit var dataRepository: DataRepository
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
-    // Set the main coroutines dispatcher for unit testing.
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Before
-    fun createRepository() {
-        fakeLocalDataSource = FakeLocalDataSource(mutableListOf())
-        fakeRemoteDataSource = FakeRemoteDataSource()
+    @Inject
+    lateinit var fakeLocalDataSource: ILocalDataSource
 
-        dataRepository = DataRepository(fakeLocalDataSource, fakeRemoteDataSource, Dispatchers.Main)
+    @Inject
+    lateinit var fakeRemoteDataSource: IRemoteDataSource
+
+    @Inject
+    lateinit var coDispatcher: CoDispatcher
+
+    private lateinit var dataRepository: DataRepository
+
+    @Before
+    fun setUp() {
+        // Populate @Inject fields in test class
+        hiltRule.inject()
+        dataRepository = DataRepository(fakeLocalDataSource, fakeRemoteDataSource, coDispatcher)
     }
 
     @Test
     fun getHeadlines_requestAllHeadlinesFromRemoteSource() = mainCoroutineRule.runBlockingTest {
-        val response = fakeRemoteDataSource.getHeadlines(emptyMap())
+        val response = dataRepository.remoteDataSource.getHeadlines(emptyMap())
         Assert.assertThat(response.articles, IsEqual(FakeResponseUtility.getResponseWith2Article().articles))
     }
 
@@ -62,7 +80,7 @@ class DataRepositoryTest {
 
     @Test
     fun getHeadlines_pageOne_errorRemoteResponse() = mainCoroutineRule.runBlockingTest {
-        fakeRemoteDataSource.setStatus(FakeRemoteDataSource.Data.SHOULD_RETURN_ERROR)
+        (fakeRemoteDataSource as FakeRemoteDataSource).setStatus(FakeRemoteDataSource.Data.SHOULD_RETURN_ERROR)
 
         val list = dataRepository.getHeadlines(emptyMap(), 1).toList()
 
@@ -76,8 +94,8 @@ class DataRepositoryTest {
 
     @Test
     fun getHeadlines_pageOne_successLocalResponse_successRemoteResponse() = mainCoroutineRule.runBlockingTest {
-        fakeLocalDataSource.insertFakeArticles(FakeResponseUtility.getResponseWith2Article().articles)
-        fakeLocalDataSource.insertFakeArticles(FakeResponseUtility.getResponseForPage2().articles)
+        (fakeLocalDataSource as FakeLocalDataSource).insertFakeArticles(FakeResponseUtility.getResponseWith2Article().articles)
+        (fakeLocalDataSource as FakeLocalDataSource).insertFakeArticles(FakeResponseUtility.getResponseForPage2().articles)
 
 
         val list = dataRepository.getHeadlines(emptyMap(), 1).toList()
@@ -94,9 +112,9 @@ class DataRepositoryTest {
 
     @Test
     fun getHeadlines_pageTwo_successLocalResponse_errorRemoteResponse() = mainCoroutineRule.runBlockingTest {
-        fakeLocalDataSource.insertFakeArticles(FakeResponseUtility.getResponseWith2Article().articles)
-        fakeLocalDataSource.insertFakeArticles(FakeResponseUtility.getResponseForPage2().articles)
-        fakeRemoteDataSource.setStatus(FakeRemoteDataSource.Data.SHOULD_RETURN_ERROR)
+        (fakeLocalDataSource as FakeLocalDataSource).insertFakeArticles(FakeResponseUtility.getResponseWith2Article().articles)
+        (fakeLocalDataSource as FakeLocalDataSource).insertFakeArticles(FakeResponseUtility.getResponseForPage2().articles)
+        (fakeRemoteDataSource as FakeRemoteDataSource).setStatus(FakeRemoteDataSource.Data.SHOULD_RETURN_ERROR)
 
         val list = dataRepository.getHeadlines(emptyMap(), 2).toList()
 
@@ -114,4 +132,5 @@ class DataRepositoryTest {
 
         Assert.assertEquals(dataRepository.localDataSource.getAllArticles(), localSourceList)
     }
-}*/
+}
+

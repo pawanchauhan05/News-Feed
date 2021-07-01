@@ -3,6 +3,8 @@ package com.app.newsfeed
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.Room
+import com.app.newsfeed.core.CoDispatcher
+import com.app.newsfeed.core.CoroutineDispatchers
 import com.app.newsfeed.data.DataRepository
 import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.local.AppDatabase
@@ -25,6 +27,9 @@ class ServiceLocator {
     @Inject
     lateinit var remoteDataSource: IRemoteDataSource
 
+    @Inject
+    lateinit var coDispatcher : CoDispatcher
+
     private val lock = Any()
     private var database: AppDatabase? = null
 
@@ -40,7 +45,7 @@ class ServiceLocator {
     }
 
     private fun createDataRepository(context: Context): IDataRepository {
-        val newRepo = DataRepository(createLocalDataSource(context), createRemoteDataSource())
+        val newRepo = DataRepository(createLocalDataSource(context), createRemoteDataSource(), CoroutineDispatchers())
         dataRepository = newRepo
         return newRepo
 
@@ -65,7 +70,7 @@ class ServiceLocator {
 
     private fun createLocalDataSource(context: Context): ILocalDataSource {
         val database = database ?: createDataBase(context)
-        return LocalDataSource(database.getArticleDao())
+        return LocalDataSource(database.getArticleDao(), coDispatcher)
     }
 
     private fun createDataBase(context: Context): AppDatabase {

@@ -1,12 +1,14 @@
 package com.app.newsfeed.data.source.local
 
+import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.pojo.Article
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class LocalDataSource internal constructor(
     private val articleDao: ArticleDao,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : ILocalDataSource {
+    private val coDispatcher: CoDispatcher
+) : ILocalDataSource {
 
 
     override fun insertArticle(article: Article) {
