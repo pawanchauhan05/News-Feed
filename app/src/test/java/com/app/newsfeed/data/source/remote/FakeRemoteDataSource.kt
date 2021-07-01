@@ -3,7 +3,7 @@ package com.app.newsfeed.data.source.remote
 import com.app.newsfeed.FakeResponseUtility
 import com.app.newsfeed.pojo.Response
 
-class FakeRemoteDataSource :  RemoteDataSource {
+class FakeRemoteDataSource :  IRemoteDataSource {
 
     enum class Data {
         SHOULD_RETURN_ERROR,
