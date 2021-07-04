@@ -1,7 +1,6 @@
 package com.app.newsfeed.di
 
-import com.app.newsfeed.core.CoDispatcher
-import com.app.newsfeed.core.CoroutineDispatchers
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 object DispatcherModule {
 
     @Provides
-    fun providesIoDispatcher(): CoDispatcher = CoroutineDispatchers()
+    fun providesDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     /*@Provides
     fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default

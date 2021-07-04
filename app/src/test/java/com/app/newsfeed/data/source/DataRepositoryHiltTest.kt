@@ -3,7 +3,6 @@ package com.app.newsfeed.data.source
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.app.newsfeed.FakeResponseUtility
 import com.app.newsfeed.MainCoroutineRule
-import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.data.DataRepository
 import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.local.FakeLocalDataSource
@@ -14,6 +13,7 @@ import com.app.newsfeed.pojo.Article
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
@@ -46,7 +46,7 @@ class DataRepositoryHiltTest {
     lateinit var fakeRemoteDataSource: IRemoteDataSource
 
     @Inject
-    lateinit var coDispatcher: CoDispatcher
+    lateinit var coDispatcher: CoroutineDispatcher
 
     private lateinit var dataRepository: DataRepository
 

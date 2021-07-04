@@ -1,7 +1,6 @@
 package com.app.newsfeed.ui.listing
 
 import androidx.lifecycle.*
-import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.ResultData
 import com.app.newsfeed.pojo.EmptyView
@@ -18,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HeadlinesViewModel @Inject constructor(
     private val dataRepository: IDataRepository,
-    private val coDispatcher: CoDispatcher
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val TAG = "HeadlinesViewModel"
@@ -43,12 +42,8 @@ class HeadlinesViewModel @Inject constructor(
             "pageSize" to "${Config.PAGE_SIZE}"
         )
 
-        System.out.println("MERA DATA " + 1)
-
-        viewModelScope.launch(coDispatcher.io()) {
-            System.out.println("MERA DATA " + 2)
+        viewModelScope.launch(dispatcher) {
             dataRepository.getHeadlines(queryParams, page).collect {
-                System.out.println("MERA DATA " + 3)
                 when (it) {
                     is ResultData.Success -> {
                         if(it.dataList.isNotEmpty()) {
@@ -75,7 +70,6 @@ class HeadlinesViewModel @Inject constructor(
             }
         }.invokeOnCompletion {
             _dataLoading.postValue(false)
-            System.out.println("MERA DATA " + 4)
         }
     }
 }
@@ -83,8 +77,8 @@ class HeadlinesViewModel @Inject constructor(
 @Suppress("UNCHECKED_CAST")
 class HeadlinesViewModelFactory @Inject constructor(
     private val dataRepository: IDataRepository,
-    private val coDispatcher: CoDispatcher
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (HeadlinesViewModel(dataRepository, coDispatcher) as T)
+        (HeadlinesViewModel(dataRepository, dispatcher) as T)
 }

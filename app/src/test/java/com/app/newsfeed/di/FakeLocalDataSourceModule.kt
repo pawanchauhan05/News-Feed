@@ -22,7 +22,7 @@ object FakeLocalDataSourceModule {
         return FakeLocalDataSource()
     }
 
-    @Singleton
+    /*@Singleton
     @Provides
-    fun provideIoDispatcher() = Dispatchers.IO
+    fun provideIoDispatcher() = Dispatchers.IO*/
 }

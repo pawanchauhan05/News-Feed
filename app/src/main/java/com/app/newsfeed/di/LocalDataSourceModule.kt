@@ -2,7 +2,6 @@ package com.app.newsfeed.di
 
 import android.content.Context
 import androidx.room.Room
-import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.data.source.local.AppDatabase
 import com.app.newsfeed.data.source.local.ILocalDataSource
 import com.app.newsfeed.data.source.local.LocalDataSource
@@ -36,8 +35,8 @@ object LocalDataSourceModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(appDatabase: AppDatabase, coDispatcher: CoDispatcher) : ILocalDataSource {
-        return LocalDataSource(appDatabase.getArticleDao(), coDispatcher)
+    fun provideLocalDataSource(appDatabase: AppDatabase, dispatcher: CoroutineDispatcher) : ILocalDataSource {
+        return LocalDataSource(appDatabase.getArticleDao(), dispatcher)
     }
 
     /*@Singleton

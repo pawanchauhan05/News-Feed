@@ -1,13 +1,12 @@
 package com.app.newsfeed.data.source.local
 
-import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.pojo.Article
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class LocalDataSource internal constructor(
     private val articleDao: ArticleDao,
-    private val coDispatcher: CoDispatcher
+    private val coDispatcher: CoroutineDispatcher
 ) : ILocalDataSource {
 
 

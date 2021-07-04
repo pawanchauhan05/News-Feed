@@ -1,11 +1,12 @@
 package com.app.newsfeed.di
 
-import com.app.newsfeed.core.CoDispatcher
-import com.app.newsfeed.core.TestCoroutineDispatchers
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -17,5 +18,6 @@ class FakeDispatcherModule {
 
     @Singleton
     @Provides
-    fun providesIoDispatcher() : CoDispatcher = TestCoroutineDispatchers()
+    @ExperimentalCoroutinesApi
+    fun providesDispatcher() : CoroutineDispatcher = TestCoroutineDispatcher()
 }

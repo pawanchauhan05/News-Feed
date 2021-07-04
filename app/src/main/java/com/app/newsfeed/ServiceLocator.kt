@@ -3,14 +3,13 @@ package com.app.newsfeed
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.Room
-import com.app.newsfeed.core.CoDispatcher
-import com.app.newsfeed.core.CoroutineDispatchers
 import com.app.newsfeed.data.DataRepository
 import com.app.newsfeed.data.IDataRepository
 import com.app.newsfeed.data.source.local.AppDatabase
 import com.app.newsfeed.data.source.local.ILocalDataSource
 import com.app.newsfeed.data.source.local.LocalDataSource
 import com.app.newsfeed.data.source.remote.IRemoteDataSource
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,7 +27,7 @@ class ServiceLocator {
     lateinit var remoteDataSource: IRemoteDataSource
 
     @Inject
-    lateinit var coDispatcher : CoDispatcher
+    lateinit var dispatcher : CoroutineDispatcher
 
     private val lock = Any()
     private var database: AppDatabase? = null
@@ -45,7 +44,7 @@ class ServiceLocator {
     }
 
     private fun createDataRepository(context: Context): IDataRepository {
-        val newRepo = DataRepository(createLocalDataSource(context), createRemoteDataSource(), CoroutineDispatchers())
+        val newRepo = DataRepository(createLocalDataSource(context), createRemoteDataSource(), dispatcher)
         dataRepository = newRepo
         return newRepo
 
@@ -70,7 +69,7 @@ class ServiceLocator {
 
     private fun createLocalDataSource(context: Context): ILocalDataSource {
         val database = database ?: createDataBase(context)
-        return LocalDataSource(database.getArticleDao(), coDispatcher)
+        return LocalDataSource(database.getArticleDao(), dispatcher)
     }
 
     private fun createDataBase(context: Context): AppDatabase {

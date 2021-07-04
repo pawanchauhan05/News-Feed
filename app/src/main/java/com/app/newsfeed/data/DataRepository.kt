@@ -1,6 +1,5 @@
 package com.app.newsfeed.data
 
-import com.app.newsfeed.core.CoDispatcher
 import com.app.newsfeed.data.source.ResultData
 import com.app.newsfeed.data.source.local.ILocalDataSource
 import com.app.newsfeed.data.source.remote.IRemoteDataSource
@@ -13,7 +12,7 @@ import javax.inject.Inject
 class DataRepository(
     public val localDataSource: ILocalDataSource,
     public val remoteDataSource: IRemoteDataSource,
-    public val coDispatcher: CoDispatcher
+    public val coDispatcher: CoroutineDispatcher
 ) : IDataRepository {
 
     private val TAG = "DataRepository"
